@@ -1,0 +1,52 @@
+PA2.1 范围查询
+Descriptioin
+
+Let S be a set of n integral points on the x-axis. For each given interval [a, b], you are asked to count the points lying inside.
+Input
+The first line contains two integers: n (size of S) and m (the number of queries).
+The second line enumerates all the n points in S.
+Each of the following m lines consists of two integers a and b and defines an query interval [a, b].
+Output
+The number of points in S lying inside each of the m query intervals.
+Example
+Input
+5 2
+1 3 7 9 11
+4 6
+7 12
+Output
+0
+3
+Restrictions
+0 <= n, m <= 5 * 105
+For each query interval [a, b], it is guaranteed that a <= b.
+Points in S are distinct from each other.
+Coordinates of each point as well as the query interval boundaries a and b are non-negative integers not greater than 107.
+Time: 2 sec
+Memory: 256 MB
+
+【核心思路】
+考虑到暴力查找的复杂度是O（mn），超出了题目时间限制，所以可以考虑如下思路：
+1. 对m个点存入向量，进行快速排序
+2.对每一对区间（a,b）：对a在上述向量中使用二分查找，得到位置；对b在上述向量中使用二分查找，得到所在下标。然后换算位置差即可得到有多少个点在区间。
+这样复杂度就降下来了，总复杂度就是二分查找+快速排序的复杂度O(m+nlogn)
+
+【方法实现】
+1.快速排序qsort
+•  从数列中挑出一个元素，称为 "基准"（pivot）;
+•  重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
+•  递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序
+2.二分查找，分为binSearch_left()和binSearch_right()
+二分法即不断拿取两
+binSearch_left()用于查找左区间的值的位置，返回大于等于该值的数组下标
+binSearch_right()用于查找右区间的值的位置，返回小于等于该值的数组下标
+实际上发现binSearch_right()在查找的时候对于b>s[n-1]的情况少减了1，直接在main里面用if分类讨论解决
+
+【main（）实现】
+首先开一个数组s[500010]存要输入的数
+依次扫描n，m，以及把要判断的这些数存入s[]数组
+采用for循环m次遍历数组：
+扫描m次左区间的值和右区间的值，存入a，b
+如果最小的数大于右区间值，或最大的数大于左区间值，说明没有，直接输出0；
+如果b大于等于右区间（为了修复binSearch_right()的bug直接做的），则输出（n-1）-左区间二分查找下标+1；
+否则，直接输出右区间二分查找下标-左区间二分查找下标+1

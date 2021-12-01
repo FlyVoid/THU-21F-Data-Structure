@@ -1,0 +1,81 @@
+PA2.2 
+Description
+
+In general, given the preorder traversal sequence and postorder traversal sequence of a binary tree, we cannot determine the binary tree.
+
+Figure 1
+
+In Figure 1 for example, although they are two different binary tree, their preorder traversal sequence and postorder traversal sequence are both of the same.
+
+But for one proper binary tree, in which each internal node has two sons, we can uniquely determine it through its given preorder traversal sequence and postorder traversal sequence.
+
+Label n nodes in one binary tree using the integers in [1, n], we would like to output the inorder traversal sequence of a binary tree through its preorder and postorder traversal sequence.
+Input
+
+The 1st line is an integer n, i.e., the number of nodes in one given binary tree,
+
+The 2nd and 3rd lines are the given preorder and postorder traversal sequence respectively.
+Output
+
+The inorder traversal sequence of the given binary tree in one line.
+Example
+
+Input
+
+5
+1 2 4 5 3
+4 5 2 3 1
+
+Output
+
+4 2 5 1 3
+
+Restrictions
+
+For 95% of the estimation, 1 <= n <= 1,000,00
+
+For 100% of the estimation, 1 <= n <= 4,000,000
+
+The input sequence is a permutation of {1,2...n}, corresponding to a legal binary tree.
+
+Time: 2 sec
+
+Memory: 256 MB
+Hints
+
+Figure 2
+
+In Figure 2, observe the positions of the left and right children in preorder and postorder traversal sequence.
+
+【核心思路】
+真二叉树：每个节点的孩子数目为0个或2个
+所以对于真二叉树，只有以下三种情况
+1.	根节点 ：有两个孩子
+2.	节点：有一个父亲，两个孩子
+3.	叶子：有一个父亲，没有两个儿子
+对于先序遍历，排除叶子结点之后，当前第i个节点的左孩子一定是中对应位置下一个。
+对于后序遍历，排除叶子结点之后，该结点的右孩子一定是后序遍历对应位置的前一个。
+【函数实现】
+先建立一个结构体存储二叉树
+struct treeNode
+{
+    treeNode *lchild, *rchild;
+    int num;
+};
+
+1. Build函数用于重构二叉树：build(int s1, int e1, int s2, int e2)
+其中传参意义是前序序列的坐标区间[s1,e1]，后序序列的坐标区间[s2,e2]
+	new一个指针指向树根，存入前序遍历的第一个数(pre[s1])，左右孩子置空
+	当然如果传入坐标相等（s2=e2），直接return
+	遍历 后序遍历序列，寻找左子树树根结点在后序序列的位置（左子树树根就是pre[s1 + 1]），暂存入int current
+	左孩子指向重构递归得到的根，前序为(s1 + 1, s1 + current - s2 + 1)，后序为(s2, current); 
+	右孩子指向递归重构得到的根，前序为(s1 + current - s2 + 1 + 1, e1)后序为(current + 1, e2 - 1)
+
+2. travIn()函数输出中序遍历序列：travIn(treeNode *root)
+   如果左孩子不为空，去左孩子递归 
+打印该节点的值 
+最后如果右孩子不为空，去右孩子递归
+【main实现】
+1. 前序序列存入pre[]，后序序列存入post[]
+2. build (0, n - 1, 0, n - 1)函数重构二叉树
+3. travIn()函数输出中序遍历序列
