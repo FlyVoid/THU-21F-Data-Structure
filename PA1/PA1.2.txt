@@ -1,0 +1,71 @@
+PA1.2
+Description
+Figure 1 shows the structure of a station for train dispatching.
+
+In this station, A is the entrance for each train and B is the exit. S is the transfer end. All single tracks are one-way, which means that the train can enter the station from A to S, and pull out from S to B. Note that the overtaking is not allowed. Because the compartments can reside in S, the order that they pull out at B may differ from that they enter at A. However, because of the limited capacity of S, no more that m compartments can reside at S simultaneously.
+
+Assume that a train consist of n compartments labeled {1, 2, …, n}. A dispatcher wants to know whether these compartments can pull out at B in the order of {a1, a2, …, an} (a sequence). If can, in what order he should operate it?
+Input
+Two lines:
+1st line: two integers n and m;
+2nd line: n integers separated by spaces, which is a permutation of {1, 2, …, n}. This is a compartment sequence that is to be judged regarding the feasibility.
+Output
+If the sequence is feasible, output the sequence. “Push” means one compartment goes from A to S, while “pop” means one compartment goes from S to B. Each operation takes up one line.
+If the sequence is infeasible, output a “no”.
+Example 1
+Input
+5 2
+1 2 3 5 4
+Output
+push
+pop
+push
+pop
+push
+pop
+push
+push
+pop
+pop
+
+Example 2
+Input
+5 5
+3 1 2 4 5
+Output
+No
+
+Restrictions
+1 <= n <= 1,600,000
+0 <= m <= 1,600,000
+Time: 2 sec
+Memory: 256 MB
+
+【核心思路】
+本质上是一个栈混洗的算法，栈只能用pop和push取出或放入最后一个元素、本题用三个栈A,S,B实现即可。
+class Stack{
+private:
+	int size;  //栈中实际元素个数
+	int capacity;   //栈容量 
+	int* data;  // //指向数组，存储车厢号 
+【class实现】
+1. 构造函数：初始化栈容量，size等于0，申请内存
+2. void init()：专门为栈A所构造，可依次存入存入capacity~1的车厢号
+3. int push(int x) ：把元素压入栈,返回该元素值，size加一
+4. int pop()：把最后一个元素弹出栈,返回最后一个元素的值 ，size减一
+5. int getsize()：返回栈内元素个数
+6.int top()：返回栈顶部的一个元素
+【main实现】
+1. 输入n，m，将目标序列存入数组aim[];设置output[]数组，数组内0表示pop，1表示push，用于最后遍历输出结果。
+2. 设置栈对象A,S,B，其中A用init（）初始化，放入车厢号1-n。
+3. 遍历每一个aim[i]
+(1)A压入栈S
+条件：A非空，且S空或S栈顶元素小于aim[i],且S不满
+a栈pop，s栈push
+output[j]写入1
+（2）S压入栈B
+条件：S非空，且S栈顶元素等于aim[i]
+s栈pop，a栈push
+存入output[j]写入0
+（3）否则，说明无法达成目标序列，直接输出“No”
+4. 遍历output数组输出“pop”和“push”

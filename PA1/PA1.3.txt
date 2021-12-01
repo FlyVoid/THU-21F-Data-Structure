@@ -1,0 +1,74 @@
+PA1.3 灯塔
+
+Description
+As shown in the following figure, If another lighthouse is in gray area, they can beacon each other.
+For example, in following figure, (B, R) is a pair of lighthouse which can beacon each other, while (B, G), (R, G) are NOT.
+Input
+1st line: N
+2nd ~ (N + 1)th line: each line is X Y, means a lighthouse is on the point (X, Y).
+Output
+How many pairs of lighthourses can beacon each other
+( For every lighthouses, X coordinates won't be the same , Y coordinates won't be the same )
+Example
+Input
+3
+2 2
+4 3
+5 1
+
+Output
+1
+Restrictions
+For 90% test cases: 1 <= n <= 3 * 105
+For 95% test cases: 1 <= n <= 106
+For all test cases: 1 <= n <= 4 * 106
+For every lighthouses, X coordinates won't be the same , Y coordinates won't be the same.
+1 <= x, y <= 10^8
+Time: 2 sec
+Memory: 256 MB
+Hints
+The range of int is usually [-231, 231 - 1], it may be too small.
+
+【核心思路】
+A和B能够相互照亮的条件（假设A(x)<B(x)）就是B在A的右上方。注意原题注明了：不同灯塔的x, y坐标均互异。
+所以只要我们首先将所有点按照x坐标排序，接下来在y坐标中统计所有“顺序对”，再求和。
+如果只是单纯的O(n^2)的算法显然是效率不够的。所以这里我们考虑用归并排序，nlogn的复杂度应该是能通过测试的.
+
+首先构建一个结构体存点的坐标
+struct Point{
+	long long  x,y;
+};
+
+【归并排序实现】
+归并排序：采用分治递归的思想，递归融合两路已排序子序列
+mergeSort(Point* elem,int lo,int hi)方法：从数组中间分开，左路递归，右路递归，两路用merge方法排序
+merge方法：有三个向量，原向量A[0, hi - lo) = elem[lo, hi)；/前子向量B[0, lb) = elem[lo, mi)，就是复制了A的前半部分；后子向量C[0, lc) = elem[mi, hi)。接下来采用i，ib，ic这三个指针依次指A,B,C这三个向量，不断取B,C向量中较小的那一个，不断放在A向量的始端。
+该方法复杂度为nlogn。
+另外，这里查询了参考网站，对merge方法进行了优化：
+for(int i=0,ib=0,ic=0;ib<lb;) {
+	if(  lc<=ic  ||  B[ib].x<C[ic].x  )    A[i++]=B[ib++];
+	if(  ic<lc   &&  C[ic].x<=B[ib].x )    A[i++]=C[ic++];
+}
+看for循环括号中的最后一句，其实只要B越界了就不用再排序了，因为C本来就是A的后半部分。于是这里if的判断情况分为三种：
+（已经假设B未越界）
+1.C未越界，C值>B值，选C值放到A始端
+2.C未越界，C值<B值，选B值放到A始端
+3.C已越界，选B值放到A始端
+即构成上述的判断语句。
+另外，关于如何输出顺序对的数目，这里采用count进行计数。明显注意到，只要ic不越界，那么ic之后的元素个数+1就是顺序对数，在第一个所以只要在第一个if语句后面，加一句count+=lc-ic即可完成计数。	
+
+
+
+提一下测试OJ时发现的错误，不能在for循环后用B[i]=A[i++]，会报错比如最后认为数组越界了，最好规规矩矩写成for(;;i++)B[i]=A[i];
+
+【main（）实现】
+1. 输入n，构造结构体points，然后把x，y坐标依次输入points
+2. mergeSortX方法对X进行排序，于是X升序，对应的Y也是对应的
+3.mergeSortY方法对Y进行排序，该方法在排序的时候本身就会计次（count）
+4.输出count即可
+
+
+
+
+
+
