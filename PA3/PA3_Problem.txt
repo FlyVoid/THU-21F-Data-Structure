@@ -1,0 +1,113 @@
+PA 3.1
+Description
+A broadcaster wants to set up a radio broadcast transmitter in an area. There are n towns in the area, and each town has a transmitter installed and plays its own program.
+However, the company only licensed the two bands FM104.2 and FM98.6, and transmitters using the same band would interfere with each other. It is known that the signal coverage of each transmitter is a circular area with a radius of 20km. Therefore, if two towns with a distance of less than 20km use the same band, they will not be able to function properly due to band interference. Listen to the show. Now give a list of towns with distances less than 20km, and try to determine whether the company can make residents of the entire region hear the broadcasts normally.
+Input
+The first line is two integers n, m, which are the number of towns and the number of town pairs that are less than 20km. The next m lines, 2 integers per line, indicate that the distance between the two towns is less than 20km (numbering starts at 1).
+Output
+Output 1 if the requirement is met, otherwise -1.
+
+Input sample
+4 3
+1 2
+1 3
+2 4
+
+Output sample
+1
+
+Restrictions
+1 ≤ n ≤ 10000
+1 ≤ m ≤ 30000
+There is no need to consider the spatial characteristics of a given 20km town list, such as whether triangle inequality is satisfied, whether more information can be derived using transitivity, and so on.
+Time: 2 sec
+Space: 256MB
+Tips
+BFS
+
+
+PA3.2
+Description
+Shrek is a postman working in the mountain, whose routine work is sending mail to n villages. Unfortunately, road between villages is out of repair for long time, such that some road is one-way road. There are even some villages that can’t be reached from any other village. In such a case, we only hope as many villages can receive mails as possible.
+Shrek hopes to choose a village A as starting point (He will be air-dropped to this location), then pass by as many villages as possible. Finally, Shrek will arrived at village B. In the travelling process, each villages is only passed by once. You should help Shrek to design the travel route.
+Input
+There are 2 integers, n and m, in first line. Stand for number of village and number of road respectively.
+In the following m line, m road is given by identity of villages on two terminals. From v1 to v2. The identity of village is in range [1, n].
+Output
+Output maximum number of villages Shrek can pass by.
+Example
+Input
+4 3
+1 4
+2 4
+4 3
+
+Output
+3
+
+Restrictions
+1 <= n <= 1,000,000
+0 <= m <= 1,000,000
+These is no loop road in the input.
+Time: 2 sec
+Memory: 256 MB
+Hints
+Topological sorting
+
+PA3.3
+Description
+A weather station collects temperature data from observation stations all over the country every day, and provides statistical inquiry services to remote users through the Internet. One of the most common types of queries is to calculate the average temperature based on observations from all observatories in the user-specified rectangular area. As more observatories continue to build, the size of the raw data itself has ballooned. In addition, although it can be assumed that the data collected every day is relatively fixed, as the user population expands, the frequency of queries increases. In view of the fact that the efficiency of the traditional brute force algorithm can no longer meet the practical requirements, the weather station has to ask you to help, improve the efficiency of the query by improving the data structure and algorithm.
+With a set of function interfaces provided by the weather station, the server can access all the collected data and report the results of the query.
+Interface description
+int GetNumOfStation(void);
+This function must be called first, which returns the number n of observatories.
+void GetStationInfo(int no, int *x, int *y, int *temp);
+This function returns information of no-th observatories: its geographic coordinates (*x, *y) and its measured temperature value *temp. The measurement accuracy of each observation station is based on 0.01 ° C, for example, 12.34 ° C is expressed as an integer of 1234.
+int GetQuery(int *x1, int *y1, int *x2, int *y2);
+This function receives the next query request. If it returns 1, it means this is a valid query. The four sides of the matrix area are parallel to the x or y axis, respectively. (*x1, *y1) and (*x2, *y2) are the coordinates of their southwest and northeast corners, respectively. An observatory that passes through a rectangular boundary is also considered to fall within it. If it returns 0, it means there are no more queries and your program can exit.
+
+void Response(int temp);
+For the current query, you can truncate the result after calculating the corresponding average temperature (for example, the output of 12.345 °C is 1234, the output of -12.345 °C is -1234), and then sent to the interface.
+
+Pay Attention: When a query is received by GetQuery(), if the result of the query is not reported by the Response() function, an error will be output because the result of the previous query cannot be reported. That is, GetQuery() and Response() must be called alternately, n times each.
+Test description
+
+For your debugging and testing, the temperature.h and temperature_lib.c files are included with the problem. The former stipulates the above interface, the latter is an implementation of this set of interfaces - the implementation on OJ is different, but the interface is completely consistent. You can compile them with your code when you debug, but you don't have to submit them when testing. Even if you submit them, OJ will ignore them automatically.
+download interface file
+Input
+When you debug offline, the three input interfaces implemented by temperature_lib.c will read data from file temperature.in in current directory, so you can set different input data by changing the file temperature.in in the following format
+The first line has two integers "n, m" where n is the number of observatories and m is the number of queries.
+The following n lines describe each observatory, each line contains three integers "x, y, t" where (x, y) is the coordinates of the observatory and t is the measured temperature value of the station.
+The next m lines describe each query operation, each line contains four integer "x1,y1,x2,y2" where (x1,y1) represents the southwest corner and (x2,y2) represents the northeast corner.
+Output
+When you debug offline, the Response() interface implemented by temperature_lib.c will write all output results to file temperature.out after the program runs.
+Output file has n lines, each line contains one integer, indicating the average temperature obtained per query.
+If the query area doesn't contain any observatories, please output 0.
+
+Example
+Input
+4 2
+0 0 1000
+1 1 1300
+2 2 1600
+3 3 1100
+0 0 1 1
+0 0 10 10
+
+Output
+1150
+1250
+
+Restrictions
+0<=n<=50000
+0<=m<=500000
+The coordinates of the observatory is in [-2^31, 2^31), and the coordinates of query area satisfy x1<=x2 and y1<=y2.
+Time: 10 sec
+Memory: 256 MB
+Hints
+Please use 64-bit integer for temperature calculations to prevent overflow.
+kd-tree
+range tree
+
+
+
