@@ -1,0 +1,52 @@
+Description
+
+ZC God is best at logical reasoning. One day, he talks about his childhood digital toys.
+
+The toy is like a Rubik's cube, but not a Rubik's cube. Specifically, it is not a 3 * 3 * 3 structure, but a 4 * 2 structure.
+
+According to the play of the toy, we can repeatedly transform it in the following three ways:
+
+A． Exchange the upper and lower lines. For example, the result of the transformation of Figure (a) is shown in Figure (b).
+
+B． Loop right shift (ZC God knows what this means from an early age). For example, the result of the transformation of Figure (b) is shown in Figure (c).
+
+C． The center rotates clockwise. For example, the result of the transformation of Figure (c) is shown in Figure (d).
+
+ZC God is a genius in this respect. He often has a hand that has not dried his nose, the other hand has quickly restored the toy in any state to the initial state shown in Figure (a). In the year when the material was extremely scarce, ZC God had only one such toy; today, the material is extremely rich, and you have many toys in different states. Now, please restore them all.
+Input
+
+The first line is a positive integer, which is the total number of Rubik's cube toys you have.
+
+In each one of the following N lines, 8 positive integers, i.e. an arrangement of 1~8, are included, indicating the current state of the toy.
+
+Here, the representation rule of the cube state is that the first four numbers represent the first line of the cube from left to right, and the last four numbers represent the second line from right to left. For example, the initial state is expressed as "1 2 3 4 5 6 7 8".
+Output
+
+A total of N lines, each line containing an integer, in turn corresponding to the minimum number of transform needs to be performed to restore each toy.
+
+In particular, if a toy is not recoverable, the corresponding line outputs -1.
+Example
+
+Input
+
+2
+1 2 3 4 5 6 7 8
+8 6 3 5 4 2 7 1
+
+Output
+
+0
+2
+
+Restrictions
+
+For 60% of the data, N = 1
+
+For 100% of the data,1 <= N <= 1,000
+
+Time: 1 sec
+
+Memory: 20 MB
+Hints
+
+State transition diagram and its search
